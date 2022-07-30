@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.brp.mapper.UserMapper">
+
+	<insert id="insert">
+		insert into usertable (userno, email, password, name, nickName)
+		values (seq_board.nextval, #{email}, #{password}, #{name}, #{nickName})
+	</insert>
+	
+	<insert id="insertSelectKey">
+		<selectKey order="BEFORE" keyProperty="userno"
+			resultType="long">
+			select seq_board.nextval from dual
+		</selectKey>
+		insert into usertable (userno, email, password, name, nickName)
+		values (#{userno}, #{email}, #{password}, #{name}, #{nickName})
+	</insert>
+
+	<select id="getCheckId" resultType="int">
+		select count(*) from usertable where email = #{email}
+	</select>
+	
+	<select id="getPasswordById" resultType="String">
+		select password from usertable where email = #{email}
+	</select>
+	
+	<select id="getIpAddress" resultType="String">
+		select ipAddress from usertable where email = #{email}
+	</select>
+	
+	<update id="updateIpAddress">
+		update usertable set ipAddress = #{ipAddress} where email = #{email}
+	</update>
+	
+	
+	<update id="updateSessionInfo">
+		update usertable set sessionkey = #{sessionId}, sessionlimit = #{sessionlimit}
+		where email = #{email}
+	</update>
+
+	<select id="checkSessionKey" resultType = "org.brp.domain.UserVO">
+		select * from usertable where sessionkey = #{sessionId}
+	</select>
+</mapper>
