@@ -20,4 +20,6 @@ public interface UserService {
 	int keepLogin(String sessionId, Date sessionlimit, String email); // 로그인 유지
 	
 	UserVO checkLoginBefore(String sessionId); // 로그인 되어 있는 상태인지 확인(자동 로그인)
+	
+	int deleteAccount(String email);// 회원 탈퇴
 }

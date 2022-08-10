@@ -33,7 +33,6 @@ public class CheckIpInterceptor extends HandlerInterceptorAdapter {
 
         //session에 IP 주소가 없으면 DB에서 가져오기
         if (ipAddress == null) {
-        	
             AuthInfo authInfo = (AuthInfo) session.getAttribute(AUTH_INFO);
             if (authInfo != null) {
                 String email = authInfo.getEmail();

@@ -8,8 +8,6 @@ import org.brp.domain.UserVO;
 
 public interface UserMapper {
 	
-//	List<BoardVO> getList();
-//	
 	int insert(UserVO user);
 	
 	int getCheckId(String email);
@@ -25,17 +23,5 @@ public interface UserMapper {
 	
 	UserVO checkSessionKey(@Param("sessionId") String sessionId);
 	
-	//	void insertSelectKey(UserVO user);
-	
-//	BoardVO read(Long bno);
-//	
-//	int delete(Long bno);
-//	
-//	int update(BoardVO board);
-//	
-//	List<BoardVO> getListWithPaging(Criteria cri);
-//	
-//	int getTotalCount(Criteria cri);
-//	
-//	List<BoardVO> searchTest(Map<String, Map<String,String>> map);
+	int delete(String email);
 }

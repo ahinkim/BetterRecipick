@@ -43,4 +43,8 @@
 	<select id="checkSessionKey" resultType = "org.brp.domain.UserVO">
 		select * from usertable where sessionkey = #{sessionId}
 	</select>
+	
+	<delete id="delete">
+		delete from usertable where email = #{email}
+	</delete>
 </mapper>

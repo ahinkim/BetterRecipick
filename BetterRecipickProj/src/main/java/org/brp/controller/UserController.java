@@ -18,12 +18,12 @@ import org.brp.domain.AuthInfo;
 import org.brp.domain.UserVO;
 import org.brp.exception.AlreadyExistEmailException;
 import org.brp.exception.LoginFailureException;
-import org.brp.exception.MismatchedIPException;
 import org.brp.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -145,7 +145,7 @@ public class UserController {
 			throw new LoginFailureException(); // 로그인 정보 불일치
 		}
 	}
-	
+	// 로그아웃 요청 경로
 	@GetMapping(value = "/logout")
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -167,6 +167,38 @@ public class UserController {
 			loginCookie.setMaxAge(0);
 			response.addCookie(loginCookie);
 			service.keepLogin("none", new Date(), email);
+        }
+        
+        return new ResponseEntity<>(HttpStatus.OK);
+
+    }
+	// 회원탈퇴 요청 경로
+	@DeleteMapping(value = "/delete")
+    public ResponseEntity<String> delete(HttpServletRequest request, HttpServletResponse response) {
+		
+		log.info("delete...............user");
+		
+        HttpSession session = request.getSession(false);
+        Cookie loginCookie = WebUtils.getCookie(request, "loginCookie");
+        
+        AuthInfo authInfo = (AuthInfo)session.getAttribute(AUTH_INFO);
+        String email = authInfo.getEmail();
+        
+        if (session != null) {
+            session.invalidate();
+        }
+        
+        if (loginCookie != null) {
+        	
+        	loginCookie.setPath("/");
+			loginCookie.setMaxAge(0);
+			response.addCookie(loginCookie);
+        }
+		// 회원 탈퇴
+        int idCount = service.deleteAccount(email);
+        // 유효하지 않은 session 값일 때(DB에 일치하는 이메일이 없을 때)
+        if (idCount == 0) {
+            throw new LoginFailureException();
         }
         
         return new ResponseEntity<>(HttpStatus.OK);

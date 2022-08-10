@@ -64,4 +64,10 @@ public class UserServiceImpl implements UserService{
 		
 	}
 
+	@Override
+	public int deleteAccount(String email) {
+
+		return mapper.delete(email);
+	}
+
 }
